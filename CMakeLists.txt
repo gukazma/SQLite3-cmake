@@ -6,7 +6,6 @@ project(${ROOT_NAME} VERSION 0.1.0)
 option(ENABLE_DOCS "Enable doxygen docs" ON)
 option(PRECOMPILED_HEADERS_ENABLED "Enable generate precompile headers" ON)
 
-add_subdirectory(External)
 # just for qt
 # set(CMAKE_AUTOUIC ON)
 # set(CMAKE_AUTOMOC ON)
@@ -33,20 +32,17 @@ endif()
 
 add_subdirectory(Modules)
 add_subdirectory(Apps)
-add_subdirectory(Tests)
 
 if(ENABLE_DOCS)
   file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../Docs)
   build_docs(PROCESS_DOXYFILE TRUE DOXYFILE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Docs/Doxyfile.in)
 endif()
-set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT DemoApp)
 
 if(CLANG_FORMAT_EXE)
   message(STATUS "Found clang format ............ Configuring ..............")
   file(GLOB_RECURSE FFILES ${CMAKE_SOURCE_DIR}/Modules/*.[hc] ${CMAKE_SOURCE_DIR}/Modules/*.[hc]pp ${CMAKE_SOURCE_DIR}/Apps/*.[hc] ${CMAKE_SOURCE_DIR}/Apps/*.[hc]pp)
   clang_format(${PROJECT_NAME}Format ${FFILES})
   set_target_properties(${PROJECT_NAME}Format PROPERTIES FOLDER Tools)
-  add_dependencies(${PROJECT_NAME}CommonPrecompiledHeaders ${PROJECT_NAME}Format)
 endif()
 
 if(DOT_EXE)
